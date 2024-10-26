@@ -547,4 +547,9 @@ public class SysUserServiceImpl implements ISysUserService
         }
         return successMsg.toString();
     }
+
+    @Override
+    public SysUser selectUserByOpenid(String openid) {
+        return userMapper.selectUserByOpenid(openid);
+    }
 }

@@ -1,6 +1,11 @@
 package com.ruoyi.framework.web.service;
 
 import javax.annotation.Resource;
+
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import com.ruoyi.framework.security.OpenIdAuthenticationToken;
+import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -42,6 +47,9 @@ public class SysLoginService
 
     @Resource
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private WxMaService wxMaService;
 
     @Autowired
     private RedisCache redisCache;
@@ -98,6 +106,41 @@ public class SysLoginService
         recordLoginInfo(loginUser.getUserId());
         // 生成token
         return tokenService.createToken(loginUser);
+    }
+
+    /**
+     * 微信登录验证
+     *
+     * @param appid 小程序的appid
+     * @param code  登录时获取的微信code
+     * @return 结果
+     */
+    public String wxLogin(String appid, String code) {
+        if (!wxMaService.switchover(appid)) {
+            throw new ServiceException(String.format("未找到对应appid=[%s]的配置，请核实！", appid));
+        }
+
+        try {
+            WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
+            String openId = session.getOpenid();
+
+            OpenIdAuthenticationToken authenticationToken = new OpenIdAuthenticationToken(openId);
+
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+            LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+            AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginUser.getUsername(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
+            // 记录登录信息
+            recordLoginInfo(loginUser.getUserId());
+
+            // 生成token
+            return tokenService.createToken(loginUser);
+
+        } catch (WxErrorException e) {
+            throw new ServiceException("微信登录失败：未知错误");
+        } catch (Exception e) {
+            throw new ServiceException("登录失败：" + e.getMessage());
+        }
     }
 
     /**

@@ -203,4 +203,12 @@ public interface ISysUserService
      * @return 结果
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
+
+    /**
+     * 通过微信openid查询用户
+     *
+     * @param openid 微信openid
+     * @return 用户对象信息
+     */
+    public SysUser selectUserByOpenid(String openId);
 }

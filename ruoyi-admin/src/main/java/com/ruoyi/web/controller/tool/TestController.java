@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import com.ruoyi.common.annotation.Anonymous;
+import com.ruoyi.lock.controller.LockController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.utils.StringUtils;
@@ -32,6 +29,8 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/test/user")
 public class TestController extends BaseController
 {
+    @Autowired
+    private LockController lockController;
     private final static Map<Integer, UserEntity> users = new LinkedHashMap<Integer, UserEntity>();
     {
         users.put(1, new UserEntity(1, "admin", "admin123", "15888888888"));
@@ -110,6 +109,11 @@ public class TestController extends BaseController
         {
             return R.fail("用户不存在");
         }
+    }
+    @Anonymous
+    @GetMapping("/doorOpenOnce")
+    public String testDoorOpenOnce(@RequestParam String deviceId, @RequestParam int duration) {
+        return lockController.doorOpenOnce(deviceId, duration);
     }
 }
 

@@ -61,6 +61,11 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
 
+        <!-- 门锁套件通信模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-lock</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

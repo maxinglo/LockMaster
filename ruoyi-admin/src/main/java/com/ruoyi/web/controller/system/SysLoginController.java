@@ -2,6 +2,8 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import java.util.Set;
+
+import com.ruoyi.common.core.domain.model.WxLoginBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,6 +49,21 @@ public class SysLoginController
         // 生成令牌
         String token = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(),
                 loginBody.getUuid());
+        ajax.put(Constants.TOKEN, token);
+        return ajax;
+    }
+
+    /**
+     * 微信登录方法
+     *
+     * @param wxLoginBody 微信登录信息
+     * @return 结果
+     */
+    @PostMapping("/wxLogin")
+    public AjaxResult wxLogin(@RequestBody WxLoginBody wxLoginBody) {
+        AjaxResult ajax = AjaxResult.success();
+        // 调用微信登录方法
+        String token = loginService.wxLogin(wxLoginBody.getAppid(), wxLoginBody.getCode());
         ajax.put(Constants.TOKEN, token);
         return ajax;
     }

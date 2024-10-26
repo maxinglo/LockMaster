@@ -36,6 +36,9 @@ logging:
   level:
     com.ruoyi: debug
     org.springframework: warn
+    org.springframework.web: info
+    com.github.binarywang.demo.wx.miniapp: debug
+    cn.binarywang.wx.miniapp: debug
 
 # 用户配置
 user:
@@ -64,11 +67,11 @@ spring:
   devtools:
     restart:
       # 热部署开关
-      enabled: true
+      enabled: false
   # redis 配置
   redis:
     # 地址
-    host: 10.16.210.181
+    host: 134.175.53.222
     # 端口，默认为6379
     port: 6379
     # 数据库索引
@@ -127,3 +130,17 @@ xss:
   excludes: /system/notice
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+
+mqtt:
+  broker-url: tcp://134.175.53.222:1883
+  username: server
+  password: server
+  client-id: ruoyi-lock-server
+
+wx:
+  miniapp:
+    configs:
+      - appid: wx67ba303f453b1df0
+        secret: 8c5ede713532ef7f4f7d40044a5248ae
+
+

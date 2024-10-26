@@ -124,4 +124,12 @@ public interface SysUserMapper
      * @return 结果
      */
     public SysUser checkEmailUnique(String email);
+
+    /**
+     * 通过微信openid查询用户
+     *
+     * @param openid 微信openid
+     * @return 用户对象信息
+     */
+    public SysUser selectUserByOpenid(String openid);
 }
