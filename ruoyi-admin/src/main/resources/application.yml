@@ -132,15 +132,15 @@ xss:
   urlPatterns: /system/*,/monitor/*,/tool/*
 
 mqtt:
-  broker-url: tcp://134.175.53.222:1883
-  username: server
-  password: server
-  client-id: ruoyi-lock-server
+  broker-url: 
+  username: 
+  password: 
+  client-id: 
 
 wx:
   miniapp:
     configs:
-      - appid: wx67ba303f453b1df0
-        secret: 8c5ede713532ef7f4f7d40044a5248ae
+      - appid: 
+        secret: 
 
 
